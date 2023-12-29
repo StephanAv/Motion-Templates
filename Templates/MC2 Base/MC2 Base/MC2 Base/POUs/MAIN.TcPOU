@@ -8,8 +8,7 @@ VAR
 								bPosEnable 		:= TRUE,
 								bNegEnable 		:= TRUE,
 								fOverride 		:= 100.0);
-								
-	
+
 END_VAR
 ]]></Declaration>
     <Implementation>

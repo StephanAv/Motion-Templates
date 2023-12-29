@@ -1430,6 +1430,9 @@ External Setpoint Generation:
 				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
 					<Name>PlcTask</Name>
 				</Task>
+				<Task Id="6" Priority="21" CycleTime="100000" AmsPort="351" AdtTasks="true">
+					<Name>PlcTask1</Name>
+				</Task>
 			</Tasks>
 		</System>
 		<Motion>
@@ -1514,6 +1517,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Eingänge</Name>
@@ -1605,9 +1609,9 @@ External Setpoint Generation:
 			</NC>
 		</Motion>
 		<Plc>
-			<Project GUID="{32B405EA-6255-48DD-9736-B2782F0FF444}" Name="MC2_Base" PrjFilePath="MC2_Base\MC2_Base.plcproj" TmcFilePath="MC2_Base\MC2_Base.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{E6B3C3ED-299C-077A-13A0-4463E97B1AE3}">
-					<Name>MC2_Base Instance</Name>
+			<Project GUID="{089B9B6B-9FC3-4B82-B95C-3D8CEC45715F}" Name="MC2 Base" PrjFilePath="MC2 Base\MC2 Base.plcproj" TmcFilePath="MC2 Base\MC2 Base.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{F64A8906-DEA9-02E8-FBB9-9E1ABDDD9814}">
+					<Name>MC2 Base Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
@@ -1628,21 +1632,21 @@ External Setpoint Generation:
 							<Id>0</Id>
 							<Name>PlcTask</Name>
 							<ManualConfig>
-								<OTCID>#x02010030</OTCID>
+								<OTCID>#x02010060</OTCID>
 							</ManualConfig>
-							<Priority>20</Priority>
+							<Priority>21</Priority>
 							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
 					<TaskPouOids>
-						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+						<TaskPouOid Prio="21" OTCID="#x08502001"/>
 					</TaskPouOids>
 				</Instance>
 			</Project>
 		</Plc>
 	</Project>
 	<Mappings>
-		<OwnerA Name="TIPC^MC2_Base^MC2_Base Instance">
+		<OwnerA Name="TIPC^MC2 Base^MC2 Base Instance">
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Achse 1">
 				<Link VarA="PlcTask Inputs^GVL.axis_a.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^GVL.axis_a.PlcToNc" VarB="Inputs^FromPlc"/>
