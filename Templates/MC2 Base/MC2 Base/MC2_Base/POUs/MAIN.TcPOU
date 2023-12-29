@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{604c98eb-9cbb-42bc-9d8c-17d93a758068}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	axis_a : FB_AxisBase := (	bStart	 		:= TRUE,
+								bPowerEnable 	:= TRUE,
+								bPosEnable 		:= TRUE,
+								bNegEnable 		:= TRUE,
+								fOverride 		:= 100.0);
+								
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[axis_a(_axis_ref := GVL.axis_a);]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

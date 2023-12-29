@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_AxisBase" Id="{53216d91-db3c-4d91-ac3f-174d20d70566}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisBase
+VAR_INPUT
+	_axis_ref : REFERENCE TO AXIS_REF;
+	
+	bStart			: BOOL;
+	bPowerEnable 	: BOOL;
+	bPosEnable		: BOOL;
+	bNegEnable		: BOOL;
+	bStop			: BOOL;
+	bReset 			: BOOL;
+	fOverride		: LREAL := 0;
+END_VAR
+VAR_OUTPUT
+	bAxisRdy		: BOOL;
+	bError			: BOOL;
+	nErrId			: UDINT;
+END_VAR
+VAR
+	m_fb_power 	: MC_Power;
+	m_fb_reset	: MC_Reset;
+	m_fb_stop  	: MC_Stop;
+
+	m_axis_status 	: ST_AxisStatus;
+	m_state			: ST_McOutputs;
+	st_fbMcStopOut	: ST_McOutputs;
+	
+	m_n_state		: UINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[_axis_ref.ReadStatus();
+m_axis_status := _axis_ref.Status;
+
+IF bStart THEN
+	bStart := FALSE;
+	m_n_state := 10;
+END_IF
+
+
+CASE m_n_state OF
+	0: // Idle	
+		;
+
+	10: // Enable Axis
+		m_fb_power(
+			Axis 				:= _axis_ref,
+			Enable 				:= bPowerEnable,
+			Override 			:= fOverride,
+			Enable_Positive 	:= bPosEnable,
+			Enable_Negative 	:= bNegEnable,
+		);
+		IF m_fb_power.Status THEN
+			m_n_state := 20;
+		END_IF
+		
+	20: // Axis Ready
+		bAxisRdy := TRUE;
+		m_n_state := 0;
+	
+END_CASE
+
+	
+m_fb_reset(
+	Axis := _axis_ref,
+	Execute := bReset
+	);
+
+	
+m_fb_stop(
+	Axis := _axis_ref,
+	Execute := bStop,
+	);
+
+
+bStop 	:= FALSE;
+bReset 	:= FALSE;
+
+bError := m_fb_power.Error 		OR m_fb_reset.Error		OR m_fb_stop.Error;
+nErrId := m_fb_power.ErrorID 	OR m_fb_reset.ErrorID	OR m_fb_stop.ErrorID;
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_AxisBase">
+      <LineId Id="685" Count="48" />
+      <LineId Id="68" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
